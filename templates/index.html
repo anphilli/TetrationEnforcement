@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta Http-Equiv="Cache-Control" Content="no-cache">
+    <meta Http-Equiv="Pragma" Content="no-cache">
+    <meta Http-Equiv="Expires" Content="0">
+    <meta Http-Equiv="Pragma-directive: no-cache">
+    <meta Http-Equiv="Cache-directive: no-cache">
+
+
+
+    <meta charset="UTF-8">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/tetration.css">
+
+    <title> Tetration Enforcement Reset App </title>
+
+
+</head>
+
+<body>
+<h1> Tetration Enforcement Reset App </h1>
+
+<div id="buttons">
+    <!--Clear Output from json_results div -->
+    <button id="clearButton" type="submit">Clear Output</button>
+    <!-- Pull IP Tables from Web Host-->
+    <button id="WebHostButton" type="submit">WebServer</button>
+
+
+
+<div id="WebServer">
+
+    <!-- Display Host IpTables in this div -->
+
+</div>
+
+<script>
+
+    //$("#iptablesButton").onclick()(function () {
+    //    function actionAjax() {
+    //
+    //    }
+
+    $("#WebHostButton").click(function() {
+        var actionPost =  '{ "Host" : "WebServer" }';
+        jsonActionPost = JSON.parse(actionPost);
+        actionAjax(jsonActionPost);
+    });
+
+
+    function actionAjax(jsonActionPost) {
+
+        var uri;
+        uri = 'http://127.0.0.1:8088/getiptables';
+
+        /* ajax call to flask webserver */
+
+        $.ajax({
+            url: uri,
+            type: 'post',
+            crossDomain: false,
+            timeout: 50000, //miliseconds
+            dataType: 'json',
+            data: jsonActionPost,
+            success: function(results){
+                // Flask server return current state of video stream
+                $("#WebServer").append("<pre>" + results.policyData + "</pre>") }
+
+        });
+    }
+
+    //}
+
+    $(document).ready(function() {
+        $("#clearButton").click(function(){
+            $("#WebServer").empty()
+        });
+    });
+
+
+</script>
+
+</body>
+</html>

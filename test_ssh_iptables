@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+import pexpect
+import os
+
+
+def Disp_IPTables(host_ip):
+
+
+    username = "administrator"
+    host_password = "Cisco12345"
+
+    '''
+    Get display IP Tables from host chosen hosts
+
+    '''
+    ssh_cmd = "ssh -l {0} {1}".format(username, host_ip)
+
+    print("\nSSH'ing to host {0}".format(host_ip))
+    try:
+        s = pexpect.spawn(ssh_cmd)
+        s.expect('.*password: ')
+        s.sendline(host_password)
+        s.expect('.*~\\$ ')  
+        s.sendline('sudo iptables -L -n | grep 0.0.0.0')
+        s.expect('.*password for administrator: ')
+        s.sendline(host_password)
+        s.expect('.*~\\$ ')  
+        iptables_output = s.after
+        print('you are here')
+        #s.expect('.*~\\$ ')
+        s.close()
+
+        #print(portstate)
+    except pexpect.TIMEOUT as err:
+        print("pexpect timed out! See error message below\n")
+        print(err)
+
+    return iptables_output
+
+
+host_ip = "10.8.29.10"
+
+if __name__ == "__main__":
+
+    output = Disp_IPTables(host_ip)
+
+    print(output)
+
+
