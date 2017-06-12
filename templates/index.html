@@ -32,8 +32,11 @@
     <!-- Pull IP Tables from Web Host-->
     <button id="NFSHostButton" type="submit">NFSServer</button>
 
+    <button id="sshToWeb" type="submit">SSHtoWeb</button>
 
-<div id="ipTablesDiv">
+
+
+    <div id="ipTablesDiv">
 
     <!-- Display Host IpTables in this div -->
 
@@ -66,9 +69,14 @@
     });
 
 
+    $("#sshToWeb").click(function() {
+        window.open('ssh://administrator@10.8.29.10')
+    });
+
+
+
 
     function actionAjax(jsonActionPost) {
-
         var uri;
         uri = 'http://127.0.0.1:8088/getiptables';
 
