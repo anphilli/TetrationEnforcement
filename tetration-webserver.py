@@ -11,8 +11,8 @@ app.debug = False
 
 
 WebServerIP = "10.8.29.10"
-DBServerIP = "10.8.29.11"
-NFSServerIP = "10.8.29.12"
+DBServerIP = "10.8.253.110"
+NFSServerIP = "10.8.253.111"
 
 
 def Disp_IPTables(host_ip):
@@ -111,6 +111,11 @@ def getiptables():
 
     if host_ip == "WebServer":
         response = Disp_IPTables(WebServerIP)
+    elif host_ip == "NFSServer":
+        response = Disp_IPTables(NFSServerIP)
+    if host_ip == "DBServer":
+        response = Disp_IPTables(DBServerIP)
+
     else:
         print("Invalid host: {0}, not connection possible".format(host_ip))
 

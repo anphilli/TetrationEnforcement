@@ -42,6 +42,8 @@ button:hover {
 #WebServer {
 
     font-family: "Arial", serif;
+    font: "Arial", serif;
+    font-size:16pt;
     width:60%;
 
     display:-moz-box;

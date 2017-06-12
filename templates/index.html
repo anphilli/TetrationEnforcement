@@ -14,7 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/tetration.css">
 
-    <title> Tetration Enforcement Reset App </title>
+    <title> Tetration Enforcement App </title>
 
 
 </head>
@@ -27,10 +27,13 @@
     <button id="clearButton" type="submit">Clear Output</button>
     <!-- Pull IP Tables from Web Host-->
     <button id="WebHostButton" type="submit">WebServer</button>
+    <!-- Pull IP Tables from Web Host-->
+    <button id="DBHostButton" type="submit">DBServer</button>
+    <!-- Pull IP Tables from Web Host-->
+    <button id="NFSHostButton" type="submit">NFSServer</button>
 
 
-
-<div id="WebServer">
+<div id="ipTablesDiv">
 
     <!-- Display Host IpTables in this div -->
 
@@ -49,6 +52,20 @@
         actionAjax(jsonActionPost);
     });
 
+    $("#DBHostButton").click(function() {
+        var actionPost =  '{ "Host" : "DBServer" }';
+        jsonActionPost = JSON.parse(actionPost);
+        actionAjax(jsonActionPost);
+    });
+
+
+    $("#NFSHostButton").click(function() {
+        var actionPost =  '{ "Host" : "NFSServer" }';
+        jsonActionPost = JSON.parse(actionPost);
+        actionAjax(jsonActionPost);
+    });
+
+
 
     function actionAjax(jsonActionPost) {
 
@@ -66,7 +83,7 @@
             data: jsonActionPost,
             success: function(results){
                 // Flask server return current state of video stream
-                $("#WebServer").append("<pre>" + results.policyData + "</pre>") }
+                $("#ipTablesDiv").append("<pre>" + results.policyData + "</pre>") }
 
         });
     }
@@ -75,7 +92,7 @@
 
     $(document).ready(function() {
         $("#clearButton").click(function(){
-            $("#WebServer").empty()
+            $("#ipTablesDiv").empty()
         });
     });
 
