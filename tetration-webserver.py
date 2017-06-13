@@ -15,7 +15,7 @@ DBServerIP = "10.8.253.110"
 NFSServerIP = "10.8.253.111"
 
 
-def Disp_IPTables(host_ip):
+def Disp_IPTables(host_ip, command):
 
 
     username = "administrator"
@@ -33,42 +33,7 @@ def Disp_IPTables(host_ip):
         s.expect('.*password: ')
         s.sendline(host_password)
         s.expect('.*~\\$ ')  
-        s.sendline('sudo iptables -L -n ')
-        s.expect('.*password for administrator: ')
-        s.sendline(host_password)
-        s.expect('.*~\\$ ')  
-        iptables_output = s.after
-        print('you are here')
-        #s.expect('.*~\\$ ')
-        s.close()
-
-        #print(portstate)
-    except pexpect.TIMEOUT as err:
-        print("pexpect timed out! See error message below\n")
-        print(err)
-
-    return iptables_output
-
-
-def dispIpTables(host_ip):
-
-
-    username = "administrator"
-    host_password = "Cisco12345"
-
-    '''
-    Get display IP Tables from host chosen hosts
-
-    '''
-    ssh_cmd = "ssh -l {0} {1}".format(username, host_ip)
-
-    print("\nSSH'ing to host {0}".format(host_ip))
-    try:
-        s = pexpect.spawn(ssh_cmd)
-        s.expect('.*password: ')
-        s.sendline(host_password)
-        s.expect('.*~\\$ ')  
-        s.sendline('sudo iptables -L -n | grep 0.0.0.0')
+        s.sendline(command)
         s.expect('.*password for administrator: ')
         s.sendline(host_password)
         s.expect('.*~\\$ ')  
@@ -107,17 +72,38 @@ def getiptables():
     payload = request.form
 
     host_ip = payload['Host']
+    port_num = payload['ports']
+    #str(host_ip)
+    #str(port_num)
     print(host_ip)
+    print(port_num)
 
-    if host_ip == "WebServer":
-        response = Disp_IPTables(WebServerIP)
-    elif host_ip == "NFSServer":
-        response = Disp_IPTables(NFSServerIP)
-    if host_ip == "DBServer":
-        response = Disp_IPTables(DBServerIP)
 
+    #Show Application Specific IPTables Rules
+    if host_ip == "WebServer" and port_num == "8082":
+        command = "sudo iptables -L -n -v | grep 172.* | grep {0}".format(port_num)
+        response = Disp_IPTables(WebServerIP, command )
+
+    elif host_ip == "DBServer" and port_num == "3306":
+        command = "sudo iptables -L -n -v | grep {0}".format(port_num)
+        response = Disp_IPTables(DBServerIP, command)
+
+    elif host_ip == "NFSServer" and port_num == "2049":
+        command = "sudo iptables -L -n -v | grep {0}".format(port_num)
+        response = Disp_IPTables(NFSServerIP, command)
+
+    #Show clean IPtables Rules
+    # elif host_ip == "WebServer" & port_num == "8082":
+    #     command = "iptables -L -n -v | grep dpt{0}".format(port_num)
+    #     response = Disp_IPTables(WebServerIP, command )
+    # elif host_ip == "NFSServer" & port_num == "2049":
+    #     response = Disp_IPTables(NFSServerIP)
+    #     command = "iptables -L -n -v | grep dpt{0}".format(port_num)
+    # elif host_ip == "DBServer" & port_num == "3306":
+    #     command = "iptables -L -n -v | grep dpt{0}".format(port_num)
+    #     response = Disp_IPTables(DBServerIP)
     else:
-        print("Invalid host: {0}, not connection possible".format(host_ip))
+        print("Invalid host: {0}, and/or port number {1}, no connection possible".format(host_ip, port_num))
 
     print(response)
     policy = {'policyData' : response }

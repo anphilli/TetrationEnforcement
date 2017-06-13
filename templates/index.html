@@ -32,8 +32,9 @@
     <!-- Pull IP Tables from Web Host-->
     <button id="NFSHostButton" type="submit">NFSServer</button>
 
+    <!--
     <button id="sshToWeb" type="submit">SSHtoWeb</button>
-
+    -->
 
 
     <div id="ipTablesDiv">
@@ -50,28 +51,28 @@
     //    }
 
     $("#WebHostButton").click(function() {
-        var actionPost =  '{ "Host" : "WebServer" }';
+        var actionPost =  '{ "Host" : "WebServer",  "ports" : "8082" }';
         jsonActionPost = JSON.parse(actionPost);
         actionAjax(jsonActionPost);
     });
 
     $("#DBHostButton").click(function() {
-        var actionPost =  '{ "Host" : "DBServer" }';
+        var actionPost =  '{ "Host" : "DBServer",  "ports" : "3306" }';
         jsonActionPost = JSON.parse(actionPost);
         actionAjax(jsonActionPost);
     });
 
 
     $("#NFSHostButton").click(function() {
-        var actionPost =  '{ "Host" : "NFSServer" }';
+        var actionPost =  '{ "Host" : "NFSServer",  "ports" : "2049" }';
         jsonActionPost = JSON.parse(actionPost);
         actionAjax(jsonActionPost);
     });
 
 
-    $("#sshToWeb").click(function() {
-        window.open('ssh://administrator@10.8.29.10')
-    });
+//    $("#sshToWeb").click(function() {
+//        window.open('ssh://administrator@10.8.29.10')
+//    });
 
 
 
